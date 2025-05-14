@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragments/layout :: body">
+<body>
+<h2 th:text="${book.id} != null ? 'Edit Book' : 'Add New Book'"></h2>
+
+<form th:action="@{/books}" th:object="${book}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+
+    <div class="mb-3">
+        <label>Title</label>
+        <input type="text" class="form-control" th:field="*{title}"/>
+        <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+    </div>
+
+    <div class="mb-3">
+        <label>Author</label>
+        <input type="text" class="form-control" th:field="*{author}"/>
+        <div class="text-danger" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
+    </div>
+
+    <div class="mb-3">
+        <label>Genre</label>
+        <input type="text" class="form-control" th:field="*{genre.name}"/>
+        <div class="text-danger" th:if="${#fields.hasErrors('genre.name')}" th:errors="*{genre.name}"></div>
+    </div>
+
+    <div class="mb-3">
+        <label>Publisher</label>
+        <select class="form-select" th:field="*{publisher.id}">
+            <option th:each="pub : ${publishers}" th:value="${pub.id}" th:text="${pub.name}">Publisher</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a th:href="@{/books}" class="btn btn-secondary">Cancel</a>
+</form>
+</body>
+</html>
