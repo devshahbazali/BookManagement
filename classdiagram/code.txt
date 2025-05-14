@@ -1,0 +1,80 @@
+@startuml
+' Define Stereotypes for MVC layers
+package "Model Layer" {
+    class Book {
+        +Long id
+        +String title
+        +String author
+        +Genre genre
+        +Publisher publisher
+    }
+    
+    class Publisher {
+        +Long id
+        +String name
+        +String address
+    }
+    
+    class Genre {
+        +String name
+    }
+}
+
+package "Controller Layer" {
+    class BookController <<Controller>> {
+        +list(Model model): String
+        +createForm(Model model): String
+        +save(Book book, BindingResult result): String
+        +edit(Long id, Model model): String
+        +delete(Long id): String
+    }
+    
+    class PublisherController <<Controller>> {
+        +list(Model model): String
+        +createForm(Model model): String
+        +save(Publisher publisher, BindingResult result): String
+        +edit(Long id, Model model): String
+        +delete(Long id): String
+    }
+}
+
+package "Service Layer" {
+    class BookService <<Service>> {
+        +save(Book book): void
+        +findAll(): List<Book>
+        +findById(Long id): Book
+        +delete(Long id): void
+    }
+    
+    class PublisherService <<Service>> {
+        +save(Publisher publisher): void
+        +findAll(): List<Publisher>
+        +findById(Long id): Publisher
+        +delete(Long id): void
+    }
+}
+
+package "Repository Layer" {
+    interface BookRepository <<Repository>> {
+        +findAll(): List<Book>
+        +findById(Long id): Optional<Book>
+        +save(Book book): Book
+        +deleteById(Long id): void
+    }
+    
+    interface PublisherRepository <<Repository>> {
+        +findAll(): List<Publisher>
+        +findById(Long id): Optional<Publisher>
+        +save(Publisher publisher): Publisher
+        +deleteById(Long id): void
+    }
+}
+
+' Define relationships
+Book "1" -- "1" Publisher : belongs to
+Book "1" -- "1" Genre : belongs to
+BookController -- BookService : uses
+BookController -- BookRepository : uses
+PublisherController -- PublisherService : uses
+PublisherController -- PublisherRepository : uses
+@enduml
