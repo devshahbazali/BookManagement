@@ -1,38 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="fragments/layout :: body">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
 <body>
-<h2 th:text="${book.id} != null ? 'Edit Book' : 'Add New Book'"></h2>
+<div class="container mt-4">
 
-<form th:action="@{/books}" th:object="${book}" method="post">
-    <input type="hidden" th:field="*{id}"/>
+    <nav class="mb-4">
+        <a th:href="@{/}" class="btn btn-outline-secondary">Home</a>
+        <a th:href="@{/books}" class="btn btn-outline-primary">Books</a>
+        <a th:href="@{/publishers}" class="btn btn-outline-primary">Publishers</a>
+    </nav>
 
-    <div class="mb-3">
-        <label>Title</label>
-        <input type="text" class="form-control" th:field="*{title}"/>
-        <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
-    </div>
+    <h2 th:text="${book.id != null} ? 'Edit Book' : 'New Book'">Book Form</h2>
 
-    <div class="mb-3">
-        <label>Author</label>
-        <input type="text" class="form-control" th:field="*{author}"/>
-        <div class="text-danger" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
-    </div>
+    <form th:action="@{/books}" th:object="${book}" method="post">
+        <input type="hidden" th:field="*{id}" />
 
-    <div class="mb-3">
-        <label>Genre</label>
-        <input type="text" class="form-control" th:field="*{genre.name}"/>
-        <div class="text-danger" th:if="${#fields.hasErrors('genre.name')}" th:errors="*{genre.name}"></div>
-    </div>
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input th:field="*{title}" type="text" class="form-control" id="title" required>
+        </div>
 
-    <div class="mb-3">
-        <label>Publisher</label>
-        <select class="form-select" th:field="*{publisher.id}">
-            <option th:each="pub : ${publishers}" th:value="${pub.id}" th:text="${pub.name}">Publisher</option>
-        </select>
-    </div>
+        <div class="mb-3">
+            <label for="author" class="form-label">Author</label>
+            <input th:field="*{author}" type="text" class="form-control" id="author" required>
+        </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a th:href="@{/books}" class="btn btn-secondary">Cancel</a>
-</form>
+        <div class="mb-3">
+            <label for="genre" class="form-label">Genre</label>
+            <select th:field="*{genre.name}" class="form-select" required>
+                <option value="" disabled selected>Select Genre</option>
+                <option th:each="genre : ${genres}" th:value="${genre.name}" th:text="${genre.name}">Genre</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="publisher" class="form-label">Publisher</label>
+            <select th:field="*{publisher.id}" class="form-select" required>
+                <option value="" disabled selected>Select Publisher</option>
+                <option th:each="pub : ${publishers}" th:value="${pub.id}" th:text="${pub.name}">Publisher</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/books}" class="btn btn-secondary">Cancel</a>
+    </form>
+
+</div>
 </body>
 </html>

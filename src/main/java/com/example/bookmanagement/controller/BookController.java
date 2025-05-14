@@ -1,24 +1,37 @@
 package com.example.bookmanagement.controller;
 
+import com.example.bookmanagement.model.Book;
+import com.example.bookmanagement.model.Genre;
+import com.example.bookmanagement.model.Publisher;
+import com.example.bookmanagement.service.BookService;
+import com.example.bookmanagement.service.PublisherService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.bookmanagement.model.Book;
-import com.example.bookmanagement.service.BookService;
-
-import jakarta.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/books")
 public class BookController {
-    @Autowired private BookService bookService;
+
+    @Autowired
+    private BookService bookService;
+
+    @Autowired
+    private PublisherService publisherService;
+
+    private List<Genre> genreOptions = Arrays.asList(
+        new Genre("Fiction"),
+        new Genre("Non-Fiction"),
+        new Genre("Science Fiction"),
+        new Genre("Biography"),
+        new Genre("Fantasy")
+    );
 
     @GetMapping
     public String list(Model model) {
@@ -29,12 +42,18 @@ public class BookController {
     @GetMapping("/new")
     public String createForm(Model model) {
         model.addAttribute("book", new Book());
+        model.addAttribute("genres", genreOptions);
+        model.addAttribute("publishers", publisherService.findAll());
         return "books/form";
     }
 
     @PostMapping
-    public String save(@ModelAttribute @Valid Book book, BindingResult result) {
-        if (result.hasErrors()) return "books/form";
+    public String save(@ModelAttribute @Valid Book book, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("genres", genreOptions);
+            model.addAttribute("publishers", publisherService.findAll());
+            return "books/form";
+        }
         bookService.save(book);
         return "redirect:/books";
     }
@@ -42,6 +61,8 @@ public class BookController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
         model.addAttribute("book", bookService.findById(id));
+        model.addAttribute("genres", genreOptions);
+        model.addAttribute("publishers", publisherService.findAll());
         return "books/form";
     }
 
@@ -50,9 +71,4 @@ public class BookController {
         bookService.delete(id);
         return "redirect:/books";
     }
-     @GetMapping("/")
-    public String home() {
-        return "home";
-    }
-
 }

@@ -1,15 +1,33 @@
-
 package com.example.bookmanagement.service;
-import java.util.List;
+
+import com.example.bookmanagement.model.Publisher;
+import com.example.bookmanagement.repository.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.bookmanagement.model.Publisher;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PublisherService {
-    @Autowired private com.example.bookmanagement.repository.PublisherRepository publisherRepository;
-    public List<Publisher> findAll() { return publisherRepository.findAll(); }
-    public Publisher save(Publisher publisher) { return publisherRepository.save(publisher); }
-    public Publisher findById(Long id) { return publisherRepository.findById(id).orElse(null); }
-    public void delete(Long id) { publisherRepository.deleteById(id); }
+
+    @Autowired
+    private PublisherRepository publisherRepository;
+
+    public List<Publisher> findAll() {
+        return publisherRepository.findAll();
+    }
+
+    public Publisher findById(Long id) {
+    return publisherRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Publisher not found with id " + id));
+}
+
+    public Publisher save(Publisher publisher) {
+        return publisherRepository.save(publisher);
+    }
+
+    public void delete(Long id) {
+        publisherRepository.deleteById(id);
+    }
 }

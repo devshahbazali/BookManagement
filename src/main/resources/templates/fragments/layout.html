@@ -1,3 +1,4 @@
+<!-- templates/fragments/layout.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -7,10 +8,14 @@
 <body>
 <div class="container mt-4">
     <nav class="mb-3">
+        <a th:href="@{/}" class="btn btn-outline-secondary">Home</a>
         <a th:href="@{/books}" class="btn btn-outline-primary">Books</a>
         <a th:href="@{/publishers}" class="btn btn-outline-primary">Publishers</a>
     </nav>
-    <div th:replace="~{::body}"></div>
+
+    <div th:fragment="content">
+        <!-- page-specific content goes here -->
+    </div>
 </div>
 </body>
 </html>

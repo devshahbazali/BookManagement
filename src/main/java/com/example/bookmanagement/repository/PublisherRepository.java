@@ -1,7 +1,7 @@
 package com.example.bookmanagement.repository;
 
+import com.example.bookmanagement.model.Publisher;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.bookmanagement.model.Publisher;
-
-public interface PublisherRepository extends JpaRepository<Publisher, Long> {}
+public interface PublisherRepository extends JpaRepository<Publisher, Long> {
+}
